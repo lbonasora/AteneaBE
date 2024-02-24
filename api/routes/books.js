@@ -43,7 +43,8 @@ router.post('/', (req, res, next) => {
                     // If all books have been created, send the response
                     res.status(201).json({
                         message: 'Handling POST Request to /books',
-                        createdBooks: createdBooks
+                        count: createdBooks.count,
+                        books: createdBooks
                     });
                 }
             })
@@ -67,7 +68,7 @@ router.get('/:bookId', (req, res, next) => {
         })
     } else {
         res.status(200).json({
-            message: 'You passed an id, good for you'
+            message: 'You passed an iD'
         })
     }
 });
@@ -112,8 +113,28 @@ router.patch('/:bookId', (req, res, next) => {
     const id = req.params.bookId;
 
    res.status(200).json({
-    message: 'deleted product!'
+    message: 'deleted BOOK!'
    })
+});
+
+//DELETE
+router.delete('/:bookId', (req, res, next) => {
+    const id = req.params.bookId;
+
+    Book.deleteOne({ _id: id})
+    .exec()
+    .then( result => {
+        res.status(200).json({
+            message: 'Book Deleted'
+        });
+        
+    })
+    .catch(err => {
+        console.log(err);
+        res.status(500).json({
+            error: err
+        });
+    });
 });
 
 module.exports = router;
